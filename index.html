@@ -1,0 +1,105 @@
+<!DOCTYPE html><html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>شجرة عائلة الهشال</title>
+<style>
+  body { font-family: Arial, sans-serif; direction: rtl; text-align: center; background-color: #fdfdfd; }
+  h1 { margin: 20px; font-size: 32px; }
+  .tree { display: flex; justify-content: center; flex-wrap: wrap; margin-top: 40px; }
+  .branch { text-align: center; margin: 10px; }
+  .node { display: inline-block; padding: 10px 15px; border: 2px solid #444; border-radius: 8px; margin: 5px; background-color: #e0f7fa; cursor: pointer; transition: transform 0.2s; }
+  .node:hover { transform: scale(1.1); background-color: #b2ebf2; }
+  .children { display: flex; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+</style>
+</head>
+<body>
+<h1>شجرة عائلة الهشال</h1>
+<div class="tree" id="treeContainer"></div>
+<script>
+// بيانات الشجرة الكاملة (كل الأسماء اللي كتبتها)
+const familyData = {
+  name: 'عليق', children: [
+    { name: 'وريور', children: [
+      { name: 'صياح', children: [
+        { name: 'عايد', children: [] },
+        { name: 'مصايح', children: [
+          { name: 'متروك', children: [] },
+          { name: 'محمد', children: [] },
+          { name: 'فالح', children: [
+            { name: 'حمزه', children: [] },
+            { name: 'بكر', children: [] },
+            { name: 'ادم', children: [] },
+            { name: 'ورد', children: [] }
+          ]},
+          { name: 'بسام', children: [
+            { name: 'سلطان', children: [ { name: 'عمار', children: [] } ] },
+            { name: 'صلاح', children: [] }
+          ]},
+          { name: 'حسين', children: [
+            { name: 'فهد', children: [] },
+            { name: 'احمد', children: [] },
+            { name: 'حمد', children: [] }
+          ]},
+          { name: 'باسم', children: [
+            { name: 'عمر', children: [] },
+            { name: 'ريان', children: [] }
+          ]},
+          { name: 'فهد', children: [
+            { name: 'فارس', children: [] },
+            { name: 'عبود', children: [] },
+            { name: 'سيف', children: [] }
+          ]}
+        ]}
+      ]}
+    ]},
+    { name: 'هزيم', children: [
+      { name: 'مفلح', children: [
+        { name: 'ضيف الله', children: [ { name: 'منذر', children: [] }, { name: 'يزيد', children: [] } ] },
+        { name: 'مد الله', children: [ { name: 'معتصم', children: [] } ] },
+        { name: 'عبد الرزاق', children: [ { name: 'مصعب', children: [ { name: 'عبد الرزاق', children: [] }, { name: 'اياد', children: [] }, { name: 'محمد', children: [] } ] } ] },
+        { name: 'رزق الله', children: [ { name: 'محمد', children: [] }, { name: 'عبد الرحمن', children: [] } ] },
+        { name: 'عطاء الله', children: [ { name: 'عبد العزيز', children: [] }, { name: 'وليد', children: [] }, { name: 'محمد', children: [] } ] },
+        { name: 'عبد المجيد', children: [ { name: 'ضيف الله', children: [] }, { name: 'زيد', children: [ { name: 'شهم', children: [] }, { name: 'كرم', children: [] } ] }, { name: 'محمد', children: [] } ] },
+        { name: 'اسماعيل', children: [ { name: 'شامخ', children: [] }, { name: 'امير', children: [] }, { name: 'خالد', children: [] } ] }
+      ]},
+      { name: 'محمد هزيم', children: [
+        { name: 'قاسم', children: [] },
+        { name: 'قسيم', children: [ { name: 'مالك', children: [] }, { name: 'محمد', children: [] }, { name: 'عمر', children: [] }, { name: 'حذيفه', children: [] }, { name: 'همام', children: [] } ] },
+        { name: 'خالد', children: [ { name: 'محمد', children: [] }, { name: 'محمود', children: [] } ] },
+        { name: 'بسمان', children: [ { name: 'محمد', children: [] }, { name: 'فيصل', children: [] } ] }
+      ]},
+      { name: 'خلف هزيم', children: [] }
+    ]},
+    { name: 'سرسرك', children: [
+      { name: 'منصور', children: [ { name: 'الاول', children: [ { name: 'هيثم', children: [] }, { name: 'محمد', children: [] } ] }, { name: 'الثاني', children: [] } ] },
+      { name: 'ناصر', children: [ { name: 'هيثم', children: [] }, { name: 'خالد', children: [] } ] },
+      { name: 'عواد', children: [ { name: 'راشد', children: [] }, { name: 'منور', children: [] }, { name: 'مشعل', children: [] } ] },
+      { name: 'هاني', children: [ { name: 'صدام', children: [] }, { name: 'بكر', children: [] }, { name: 'عبد الاله', children: [] } ] },
+      { name: 'فاضل', children: [ { name: 'هاشم', children: [] }, { name: 'محمد', children: [] } ] },
+      { name: 'رضوان', children: [ { name: 'جواد', children: [] }, { name: 'احمد', children: [] }, { name: 'ابراهيم', children: [] }, { name: 'محمد', children: [] } ] },
+      { name: 'محمد سرسرك', children: [ { name: 'زيد', children: [] }, { name: 'زياد', children: [] } ] }
+    ]},
+    { name: 'فنطول', children: [
+      { name: 'محمد', children: [ { name: 'ايمن', children: [] }, { name: 'امين', children: [] }, { name: 'عبد الله', children: [] }, { name: 'علي', children: [] } ] },
+      { name: 'عبد الكريم', children: [ { name: 'رائد', children: [ { name: 'امير', children: [] } ] }, { name: 'منصور', children: [] }, { name: 'محمد', children: [ { name: 'عمر', children: [] }, { name: 'تيم', children: [] }, { name: 'كرم', children: [] } ] }, { name: 'احمد', children: [ { name: 'ليث', children: [] }, { name: 'سلطان', children: [] }, { name: 'نجم', children: [] } ] }, { name: 'سلطان', children: [] }, { name: 'وائل', children: [] }, { name: 'خالد', children: [] }, { name: 'ثامر', children: [] } ] },
+      { name: 'هايل', children: [ { name: 'عاكف', children: [] }, { name: 'صقر', children: [] }, { name: 'متعب', children: [] }, { name: 'دحام', children: [] } ] },
+      { name: 'حسين', children: [ { name: 'حمزه', children: [ { name: 'حسين', children: [] } ] }, { name: 'محمد', children: [] }, { name: 'احمد', children: [] }, { name: 'ايهم', children: [] } ] },
+      { name: 'عبد الله', children: [ { name: 'يزن', children: [] }, { name: 'سلطان', children: [] } ] },
+      { name: 'سلامه', children: [ { name: 'محمد', children: [] }, { name: 'حماده', children: [] }, { name: 'حمد', children: [] } ] }
+    ]},
+    { name: 'وروير', children: [
+      { name: 'عبد الله', children: [ { name: 'رعد', children: [] }, { name: 'لورنس', children: [] } ] },
+      { name: 'محمد', children: [] },
+      { name: 'خالد', children: [ { name: 'حمزه', children: [] }, { name: 'حسام', children: [] } ] },
+      { name: 'احمد', children: [] },
+      { name: 'وريور', children: [] }
+    ]},
+    { name: 'احمد وروير', children: [ { name: 'بندر', children: [] }, { name: 'منذر', children: [] } ] }
+  ]
+};function createNode(person) { const node = document.createElement('div'); node.className = 'branch'; const label = document.createElement('div'); label.className = 'node'; label.textContent = person.name; node.appendChild(label); if (person.children && person.children.length > 0) { const childrenContainer = document.createElement('div'); childrenContainer.className = 'children'; person.children.forEach(child => { childrenContainer.appendChild(createNode(child)); }); node.appendChild(childrenContainer); } return node; }
+
+document.getElementById('treeContainer').appendChild(createNode(familyData)); </script>
+
+</body>
+</html>
